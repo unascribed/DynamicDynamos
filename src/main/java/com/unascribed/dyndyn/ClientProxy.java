@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class ClientProxy extends Proxy {
 
-	public static Map<TileDynamoBase, MutableFloat> stroke = new WeakIdentityHashMap<>();
+	public static Map<TileDynamoBase, MutableFloat> stroke = new WeakIdentityHashMap<TileDynamoBase, MutableFloat>();
 	
 	@Override
 	public void init() {

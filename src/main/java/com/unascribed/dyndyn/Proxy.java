@@ -20,7 +20,7 @@ public abstract class Proxy {
 	}
 	
 	private int ticks = 0;
-	private Map<TileDynamoBase, Integer> lastTickRate = new WeakIdentityHashMap<>();
+	private Map<TileDynamoBase, Integer> lastTickRate = new WeakIdentityHashMap<TileDynamoBase, Integer>();
 	
 	@SubscribeEvent
 	public void onTick(ServerTickEvent e) {
