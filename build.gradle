@@ -1,0 +1,87 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		classpath 'me.tatarka:gradle-retrolambda:3.2.0'
+	}
+}
+
+apply plugin: 'forge'
+apply plugin: 'me.tatarka.retrolambda'
+
+group = "com.unascribed.dyndyn"
+archivesBaseName = "DynamicDynamos"
+version = "0.1"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+retrolambda {
+	jdk "/usr/lib/jvm/java-8-oracle"
+	oldJdk "/usr/lib/jvm/java-6-openjdk-amd64"
+	javaVersion JavaVersion.VERSION_1_6
+	defaultMethods true
+	
+}
+
+repositories {
+	maven {
+		name = "chickenbones"
+			url = "http://chickenbones.net/maven"
+	}
+	maven {
+		name = 'sonatype-nexus'
+		url = 'https://oss.sonatype.org/content/repositories/public/'
+	}
+}
+
+dependencies {
+	compile fileTree(dir: './lib', include: '*.jar')
+}
+
+jar {
+	manifest {
+		attributes (
+			'FMLAT': 'lanthanoid_at.cfg',
+			'FMLCorePlugin': 'com.unascribed.lanthanoid.asm.LanthanoidCorePlugin',
+			'FMLCorePluginContainsFMLMod': 'true',
+			'ForceLoadAsMod': 'true',
+		)
+	}
+}
+
+minecraft {
+	version = "1.7.10-10.13.4.1451-1.7.10"
+	runDir = "eclipse"
+	
+}
+
+processResources {
+	// this will ensure that this task is redone when the versions change.
+	inputs.property "version", project.version
+	inputs.property "mcversion", project.minecraft.version
+
+	// replace stuff in mcmod.info, nothing else
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+				
+		// replace version and mcversion
+		expand 'version':project.version, 'mcversion':project.minecraft.version
+	}
+		
+	// copy everything else, thats not the mcmod.info
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+	}
+}
