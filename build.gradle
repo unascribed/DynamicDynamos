@@ -30,6 +30,9 @@ minecraft {
 	version = "1.7.10-10.13.4.1451-1.7.10"
 	runDir = "eclipse"
 	
+	replaceIn "src/main/java/com/unascribed/dyndyn/DynamicDynamos.java"
+	replace "@VERSION@", project.version
+	
 }
 
 processResources {
