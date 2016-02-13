@@ -16,7 +16,7 @@ import cpw.mods.fml.common.Mod.Instance;
 @Mod(
 		modid="dyndyn",
 		name="Dynamic Dynamos",
-		version="0.1",
+		version="@VERSION@",
 		dependencies="required-after:ThermalExpansion"
 	)
 public class DynamicDynamos {
