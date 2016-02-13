@@ -20,7 +20,7 @@ apply plugin: 'forge'
 
 group = "com.unascribed.dyndyn"
 archivesBaseName = "DynamicDynamos"
-version = "0.2"
+version = "0.2.1"
 
 dependencies {
 	compile fileTree(dir: './lib', include: '*.jar')
