@@ -52,7 +52,6 @@ public abstract class Proxy {
 								Chunk c = w.getChunkFromBlockCoords(te.xCoord, te.zCoord);
 								for (EntityPlayerMP ep : (List<EntityPlayerMP>)w.playerEntities) {
 									if (w.getPlayerManager().isPlayerWatchingChunk(ep, c.xPosition, c.zPosition)) {
-										System.out.println("Updating "+ep);
 										DynamicDynamos.inst.network.sendTo(msg, ep);
 									}
 								}
@@ -79,7 +78,6 @@ public abstract class Proxy {
 						msg.y = tdb.yCoord;
 						msg.z = tdb.zCoord;
 						msg.energyPerTick = tdb.getInfoEnergyPerTick();
-						System.out.println("Initializing "+player);
 						DynamicDynamos.inst.network.sendTo(msg, player);
 					}
 				});
