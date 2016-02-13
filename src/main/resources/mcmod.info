@@ -5,7 +5,7 @@
   "description": "Adds fancy animations to ThermalExpansion dynamos.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "https://unascribed.com/?dyndyn",
+  "url": "http://minecraft.curseforge.com/projects/dynamic-dynamos",
   "updateUrl": "",
   "authorList": ["Aesen"],
   "credits": "",

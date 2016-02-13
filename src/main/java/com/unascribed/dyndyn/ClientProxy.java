@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import cofh.thermalexpansion.block.dynamo.TileDynamoBase;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -16,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 public class ClientProxy extends Proxy {
 
 	public static Map<TileDynamoBase, MutableFloat> stroke = new WeakIdentityHashMap<TileDynamoBase, MutableFloat>();
+	public static Map<TileDynamoBase, MutableInt> energyPerTick = new WeakIdentityHashMap<TileDynamoBase, MutableInt>();
 	
 	@Override
 	public void init() {
@@ -30,9 +32,9 @@ public class ClientProxy extends Proxy {
 			for (TileEntity te : (List<TileEntity>)Minecraft.getMinecraft().theWorld.loadedTileEntityList) {
 				if (te instanceof TileDynamoBase) {
 					TileDynamoBase tdb = (TileDynamoBase)te;
-					float speed = tdb.getInfoEnergyPerTick()/80f;
+					float speed = energyPerTick.containsKey(tdb) ? energyPerTick.get(tdb).floatValue()/80f : 0;
 					if (!stroke.containsKey(tdb)) {
-						stroke.put(tdb, new MutableFloat((te.xCoord*89)*te.yCoord+(te.zCoord*67)));
+						stroke.put(tdb, new MutableFloat(((te.xCoord*89)*te.yCoord+(te.zCoord*67))%(Math.PI*20)));
 					}
 					stroke.get(tdb).add(speed);
 				}

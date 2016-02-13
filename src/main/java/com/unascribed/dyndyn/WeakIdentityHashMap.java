@@ -1,5 +1,6 @@
 package com.unascribed.dyndyn;
 
+// From https://github.com/gfx/Java-WeakIdentityHashMap
 // This is a fork of https://android.googlesource.com/platform/libcore/+/master/luni/src/main/java/java/util/WeakIdentityHashMap.java
 
 /**

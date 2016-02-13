@@ -25,25 +25,24 @@ public class DynDynRenderer extends TileEntitySpecialRenderer {
 		if (te == null) return;
 		try {
 			TileDynamoBase dyn = (TileDynamoBase)te;
+			float speed;
 			if (!ClientProxy.stroke.containsKey(dyn)) return;
+			if (ClientProxy.energyPerTick.containsKey(dyn)) {
+				speed = ClientProxy.energyPerTick.get(dyn).floatValue()/80f;
+			} else {
+				speed = 0;
+			}
 			
 			float x = (float)xD;
 			float y = (float)yD;
 			float z = (float)zD;
 			
-			float speed = (dyn.getInfoEnergyPerTick()/80f);
 			
 			float pumpX = 0f;
 			float pumpY = 0f;
 			float pumpZ = -0.25f;
 			
 			float stroke = (MathHelper.sin((ClientProxy.stroke.get(dyn).floatValue()+(partialTicks*speed))/10f)+1f)/2f;
-			
-			/*float pumpXSize = 0.4f;
-			float pumpYSize = 1/16f;
-			float pumpZSize = 0.4f;
-			
-			pumpY += pumpYSize;*/
 			
 			pumpZ -= (stroke)*(0.245f);
 			
@@ -81,43 +80,6 @@ public class DynDynRenderer extends TileEntitySpecialRenderer {
 				ResourceLocation loc = resLocCache.get(name);
 				Minecraft.getMinecraft().renderEngine.bindTexture(loc);
 				model.render(null, 0, 0, 0, 0, 0, partialTicks);
-				/*Tessellator tess = Tessellator.instance;
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glDisable(GL11.GL_CULL_FACE);
-				GL11.glColor3f(1, 0, 0);
-				tess.startDrawingQuads();
-				tess.addVertex(pumpX-pumpXSize, pumpY-pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX+pumpXSize, pumpY-pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX+pumpXSize, pumpY-pumpYSize, pumpZ+pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY-pumpYSize, pumpZ+pumpZSize);
-				
-				tess.addVertex(pumpX+pumpXSize, pumpY+pumpYSize, pumpZ+pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY+pumpYSize, pumpZ+pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY+pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX+pumpXSize, pumpY+pumpYSize, pumpZ-pumpZSize);
-				
-				tess.addVertex(pumpX+pumpXSize, pumpY+pumpYSize, pumpZ+pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY+pumpYSize, pumpZ+pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY-pumpYSize, pumpZ+pumpZSize);
-				tess.addVertex(pumpX+pumpXSize, pumpY-pumpYSize, pumpZ+pumpZSize);
-				
-				tess.addVertex(pumpX+pumpXSize, pumpY+pumpYSize, pumpZ+pumpZSize);
-				tess.addVertex(pumpX+pumpXSize, pumpY+pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX+pumpXSize, pumpY-pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX+pumpXSize, pumpY-pumpYSize, pumpZ+pumpZSize);
-				
-				tess.addVertex(pumpX+pumpXSize, pumpY+pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY+pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY-pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX+pumpXSize, pumpY-pumpYSize, pumpZ-pumpZSize);
-				
-				tess.addVertex(pumpX-pumpXSize, pumpY+pumpYSize, pumpZ+pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY+pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY-pumpYSize, pumpZ-pumpZSize);
-				tess.addVertex(pumpX-pumpXSize, pumpY-pumpYSize, pumpZ+pumpZSize);
-				tess.draw();
-				GL11.glEnable(GL11.GL_CULL_FACE);
-				GL11.glEnable(GL11.GL_TEXTURE_2D);*/
 			GL11.glPopMatrix();
 		} catch (Throwable t) {
 			t.printStackTrace();
