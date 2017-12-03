@@ -1,4 +1,4 @@
-package com.unascribed.dyndyn;
+package com.elytradev.dynamicdynamos;
 
 public class ServerProxy extends Proxy {
 

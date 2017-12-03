@@ -1,0 +1,54 @@
+// See https://github.com/elytra/Skeleton/wiki for what all these values mean
+
+ext {
+	group = 'com.elytradev'
+	projectName = 'DynamicDynamos'
+
+	useElytraVersionFormat = true
+	version = '1'
+
+	concreteVersion = '0.3.4-SNAPSHOT'
+	concreteModules = [ ]
+
+	coremod = null
+	miniVersion = null
+
+	language = 'java'
+
+	forge = '1.12.2-14.23.1.2557'
+	mappings = 'snapshot_20171130'
+
+	enforceLicenseHeaders = false
+
+	verbose = false
+}
+
+if (!ext.early) {
+repositories {
+	// the skeleton already defines mavenCentral, jcenter, and the Elytra repo
+	// will also have Shadowfacts' maven if the language is set to kotlin
+	maven {
+		name = "CoFH Maven"
+		url = "http://maven.covers1624.net"		
+	}
+	maven {
+		name = 'jei'
+		url = 'https://dvs1.progwml6.com/files/maven'
+	}
+	maven {
+		name = 'chickenbones'
+		url = 'http://chickenbones.net/maven/'
+	}
+}
+dependencies {
+	deobfCompile('cofh:ThermalExpansion:1.12.2-5.3.7.27:universal') { transitive = false }
+	deobfCompile('cofh:ThermalDynamics:1.12.2-2.3.7.14:universal') { transitive = false }
+	deobfCompile('cofh:ThermalFoundation:1.12.2-2.3.7.18:universal') { transitive = false }
+	deobfCompile('cofh:CoFHWorld:1.12.2-1.0.2.10:universal') { transitive = false }
+	deobfCompile('cofh:CoFHCore:1.12.2-4.3.7.24:universal') { transitive = false }
+	deobfCompile('cofh:RedstoneFlux:1.12-2.0.1.2:universal') { transitive = false }
+	deobfCompile('codechicken:CodeChickenLib:1.12-3.1.4.316:universal') { transitive = false }
+	
+	deobfCompile 'mezz.jei:jei_1.12.2:4.8.4.130'
+}
+}

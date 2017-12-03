@@ -1,10 +1,25 @@
-build
-bin
-minecraft
-.gradle
-.settings
+# Compiled nonsense that does not belong in *source* control
+/build
+/bin
+/.gradle
+/minecraft
+/out
+/run
+
+# IDE nonsense that could go in source control but really shouldn't
 .classpath
 .project
-eclipse
-lib
-src/main/resources/CoFH_at.cfg
+.metadata
+.settings
+*.launch
+*.iml
+.idea
+*.ipr
+*.iws
+
+# Sekrit files
+private.properties
+
+# Files from bad operating systems :^)
+Thumbs.db
+.DS_Store

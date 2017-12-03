@@ -1,16 +1,16 @@
-package com.unascribed.dyndyn;
+package com.elytradev.dynamicdynamos;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import com.google.common.collect.Lists;
 
 import cofh.thermalexpansion.block.dynamo.TileDynamoBase;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
@@ -26,7 +26,7 @@ public abstract class Proxy {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
-	private Map<TileDynamoBase, Integer> lastTickRate = new WeakIdentityHashMap<TileDynamoBase, Integer>();
+	private Map<TileDynamoBase, Integer> lastTickRate = new WeakIdentityHashMap<>();
 	private List<Runnable> doLater = Lists.newArrayList();
 	
 	@SubscribeEvent
@@ -39,20 +39,21 @@ public abstract class Proxy {
 				itr.remove();
 			}
 			for (WorldServer w : DimensionManager.getWorlds()) {
-				for (TileEntity te : (List<TileEntity>)w.loadedTileEntityList) {
+				for (TileEntity te : w.loadedTileEntityList) {
 					if (te instanceof TileDynamoBase) {
 						TileDynamoBase tdb = (TileDynamoBase)te;
 						if (lastTickRate.containsKey(te)) {
 							if (lastTickRate.get(te).intValue() != tdb.getInfoEnergyPerTick()) {
 								UpdateDynamoEnergyRate.Message msg = new UpdateDynamoEnergyRate.Message();
-								msg.x = tdb.xCoord;
-								msg.y = tdb.yCoord;
-								msg.z = tdb.zCoord;
+								msg.pos = tdb.getPos();
 								msg.energyPerTick = tdb.getInfoEnergyPerTick();
-								Chunk c = w.getChunkFromBlockCoords(te.xCoord, te.zCoord);
-								for (EntityPlayerMP ep : (List<EntityPlayerMP>)w.playerEntities) {
-									if (w.getPlayerManager().isPlayerWatchingChunk(ep, c.xPosition, c.zPosition)) {
-										DynamicDynamos.inst.network.sendTo(msg, ep);
+								Chunk c = w.getChunkFromBlockCoords(te.getPos());
+								for (EntityPlayer ep : w.playerEntities) {
+									if (ep instanceof EntityPlayerMP) {
+										EntityPlayerMP mp = (EntityPlayerMP)ep;
+										if (w.getPlayerChunkMap().isPlayerWatchingChunk(mp, c.x, c.z)) {
+											DynamicDynamos.inst.network.sendTo(msg, mp);
+										}
 									}
 								}
 							}
@@ -66,20 +67,15 @@ public abstract class Proxy {
 	
 	@SubscribeEvent
 	public void onChunkWatch(ChunkWatchEvent.Watch e) {
-		for (TileEntity te : (Collection<TileEntity>)e.player.worldObj.getChunkFromChunkCoords(e.chunk.chunkXPos, e.chunk.chunkZPos).chunkTileEntityMap.values()) {
+		for (TileEntity te : e.getPlayer().world.getChunkFromChunkCoords(e.getChunk().x, e.getChunk().z).getTileEntityMap().values()) {
 			if (te instanceof TileDynamoBase) {
-				final EntityPlayerMP player = e.player;
-				final TileDynamoBase tdb = (TileDynamoBase)te;
-				doLater.add(new Runnable() {
-					@Override
-					public void run() {
-						UpdateDynamoEnergyRate.Message msg = new UpdateDynamoEnergyRate.Message();
-						msg.x = tdb.xCoord;
-						msg.y = tdb.yCoord;
-						msg.z = tdb.zCoord;
-						msg.energyPerTick = tdb.getInfoEnergyPerTick();
-						DynamicDynamos.inst.network.sendTo(msg, player);
-					}
+				EntityPlayerMP player = e.getPlayer();
+				TileDynamoBase tdb = (TileDynamoBase)te;
+				doLater.add(() -> {
+					UpdateDynamoEnergyRate.Message msg = new UpdateDynamoEnergyRate.Message();
+					msg.pos = tdb.getPos();
+					msg.energyPerTick = tdb.getInfoEnergyPerTick();
+					DynamicDynamos.inst.network.sendTo(msg, player);
 				});
 			}
 		}
