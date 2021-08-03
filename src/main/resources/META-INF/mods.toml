@@ -1,0 +1,11 @@
+modLoader="javafml" #mandatory
+loaderVersion="[32,)"
+license="MIT"
+issueTrackerURL="https://github.com/unascribed/DynamicDynamos16/issues"
+[[mods]]
+modId="dynamicdynamos"
+version="${file.jarVersion}"
+displayName="Dynamic Dynamos"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/dynamic-dynamos"
+authors="unascribed"
+description="Animated piston arms for Thermal Expansion dynamos."
