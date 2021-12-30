@@ -13,19 +13,11 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '2.0'
+version = '2.1'
 group = 'com.unascribed.dynamicdynamos'
 archivesBaseName = 'DynamicDynamos-1.16'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-
-repositories {
-	maven {
-		name "CurseForge"
-		url "https://minecraft.curseforge.com/api/maven/"
-		metadataSources { artifact() }
-	}
-}
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -35,7 +27,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.16.5-36.2.0'
+	minecraft 'net.minecraftforge:forge:1.16.5-36.2.22'
 	
 	implementation files('libs/cofhcore.jar', 'libs/thermalfoundation.jar', 'libs/thermalexpansion.jar')
 }

@@ -1,5 +1,7 @@
 package com.elytradev.dynamicdynamos;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import cofh.lib.util.constants.Constants;
@@ -62,6 +64,12 @@ public class DynDynRenderer extends TileEntityRenderer<DynamoTileBase> {
 
 			pumpY -= (stroke)*(0.245f);
 
+			// nothing evil going on here, nothing to see, move along
+			glMatrixMode(GL_TEXTURE);
+				glPushMatrix();
+				glScalef(1, 1f/tas.getFrameCount(), 1);
+			glMatrixMode(GL_MODELVIEW);
+			
 			matrices.push();
 				matrices.translate(0.5, 0.5, 0.5);
 				switch (dir) {
@@ -86,9 +94,20 @@ public class DynDynRenderer extends TileEntityRenderer<DynamoTileBase> {
 				}
 				matrices.translate(pumpX, pumpY, pumpZ);
 
-				pumpModel.render(matrices, buf.getBuffer(RenderType.getEntityCutout(new ResourceLocation(tas.getName().getNamespace(), "textures/"+tas.getName().getPath()+".png"))),
-						light, overlay, 1, 1, 1, 1);
+				RenderType type = RenderType.getEntityCutout(new ResourceLocation(tas.getName().getNamespace(), "textures/"+tas.getName().getPath()+".png"));
+				if (buf instanceof IRenderTypeBuffer.Impl) {
+					((IRenderTypeBuffer.Impl)buf).finish(type);
+				}
+				pumpModel.render(matrices, buf.getBuffer(type), light, overlay, 1, 1, 1, 1);
+				if (buf instanceof IRenderTypeBuffer.Impl) {
+					((IRenderTypeBuffer.Impl)buf).finish(type);
+				}
 			matrices.pop();
+			
+			// *whistling innocently*
+			glMatrixMode(GL_TEXTURE);
+				glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
